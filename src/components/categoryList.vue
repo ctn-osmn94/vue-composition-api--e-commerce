@@ -1,37 +1,43 @@
 <script setup>
 import {ref} from 'vue'
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/css';
+import { Pagination, Navigation } from "swiper";
+import "swiper/css/bundle";
 
 const categories = ref([])
 const products = ref(null)
 const eachProduct = ref([])
 const eachCard = ref([])
 
+
 async function fetchData() {
-   await fetch("/product-list.json")
+await fetch("/product-list.json")
     .then(res => res.json())
     .then((data)=> {
         const categoryTitles = data.responses[0][0].params.userCategories
         products.value = data.responses[0][0].params.recommendedProducts
         categories.value = categoryTitles
-        if (categories.value.includes(">")) {
-            
-        }
+       
     })
 }
 fetchData()
 
-function setProducts(index) {
+ function setProducts(index) {
     for (let i = 0; i < products.value.length; i++) {
         if (index === i) {
             eachProduct.value = Object.values(products.value[i])
+            
         }
         
     }
     eachProduct.value.map(item => {
         eachCard.value = item
+        console.log(item);
     })
-
 } 
+
+
 
 </script>
 
@@ -47,19 +53,37 @@ function setProducts(index) {
                 
             </div>
         </div>
-
-        <div
-        class="flex flex-col p-5 bg-lime-200 w-96 mr-6 rounded-md" 
-        v-for="product in eachCard"
-        :key="product.id"
-        >
-            <img class="rounded-md" :src="product.image" alt="">
-            <p class="font-bold text-lg">{{product.name}}</p>
-            <p class="font-extrabold text-3xl">{{product.priceText}}</p>
-            <p v-show="product.params.shippingFee =='FREE'">Ücretsiz Kargo</p>
-            <button class="p-3 bg-blue-300 border-none">Sepete Ekle</button> 
-        </div>
+            
+            <swiper
+                :slidesPerView="5"
+                :spaceBetween="30"
+                :slidesPerGroup="5"
+                :loop="true"
+                :loopFillGroupWithBlank="true"
+                :pagination="{
+                    clickable: true
+                }"
+                :navigation="true"
+                :modules= [Navigation,Pagination]
+                class="mySwiper flex max-w-screen-2xl"
+            >
+                
+                <swiper-slide
+                v-for="product in eachCard"
+                :key="product.id"
+                >
+                    <div class="p-5 bg-lime-200 w-full h-full mr-6 rounded-md">
+                        <img class="rounded-md" :src="product.image" alt="">
+                        <p class="font-bold text-lg">{{product.name}}</p>
+                        <p class="font-extrabold text-3xl">{{product.priceText}}</p>
+                        <p v-show="product.params.shippingFee =='FREE'">Ücretsiz Kargo</p>
+                        <button class="p-3 bg-blue-300 border-none">Sepete Ekle</button>
+                    </div>
+                    
+                </swiper-slide>
+            </swiper>
         
     </div>
    
 </template>
+
