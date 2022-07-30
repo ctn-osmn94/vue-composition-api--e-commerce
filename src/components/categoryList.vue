@@ -72,51 +72,77 @@ function Basket() {
 </script>
 
 <template>
-    <div class="flex flex-col justify-center w-full px-5 py-10 " :class="{'popup':isActive}">
-        <h1 class="font-bold text-3xl mb-10">Sizin İçin Seçtiklerimiz</h1>
-        <div class="flex gap-10">
+    <div class="md:p-10 pt-10">
+        <div class="shadow-xl" :class="{'popup':isActive}">
+            <h1 class="font-bold text-2xl md:text-3xl md:mb-10 sm:text-left m-6">Sizin İçin Seçtiklerimiz</h1>
+            <div class="flex md:flex-row flex-col pb-10">
 
-            <div class="flex flex-col gap-4">
-                <div class="bg-blue-200 p-5 rounded-md cursor-pointer hover:bg-blue-300 transition duration-300" 
+                <div class="flex sm:flex-col flex-wrap gap-4 justify-center text-center items-center">
+                    <div
+                    class="bg-blue-200 p-3 w-40 md:w-full rounded-md cursor-pointer hover:bg-blue-300 transition duration-300"
                     v-for="(title,index) in categories" 
                     :key="title.index"
                     @click="setProducts(index)">
-                    <p v-if="title.includes('>')">{{title.split('>')[1]}}</p>
-                    <p v-else>{{title}}</p>
-                    
-                </div>
-            </div>
-                
-            <swiper
-                :slidesPerView="5"
-                :spaceBetween="30"
-                :slidesPerGroup="5"
-                :loop="true"
-                :loopFillGroupWithBlank="true"
-                :navigation="true"
-                :modules= [Navigation,Pagination]
-                class="mySwiper flex max-w-screen-2xl"
-            >
-                <swiper-slide
-                v-for="(product) in eachCard"
-                :key="product.id"
-                >
-                    <div class="p-5 bg-lime-200 w-full h-[480px] rounded-md space-y-3">
-                        <img class="rounded-md" :src="product.image" alt="">
-                        <p class="font-bold text-base line-clamp-1">{{product.name}}</p>
-                        <p class="font-extrabold text-2xl">{{product.priceText}}</p>
-                        <p v-show="product.params.shippingFee =='FREE'">Ücretsiz Kargo</p>
-                        <p @click="addToBasket(product)" class="p-3 bg-blue-300 border-none rounded-md cursor-pointer text-center">Sepete Ekle</p>
+                        <p class="line-clamp-1" v-if="title.includes('>')">{{title.split('>')[1]}}</p>
+                        <p v-else>{{title}}</p>
                     </div>
-                </swiper-slide>
-            </swiper>
-            
+                
+                </div>
+                    
+                <swiper
+                    :slidesPerView="5"
+                    :spaceBetween="30"
+                    :loop="true"
+                    :navigation="true"
+                    :loopFillGroupWithBlank="true"
+                    :modules= [Navigation,Pagination]
+                    class="flex sm:max-w-screen-2xl max-w-sm md:mx-6 py-6"
+                    :breakpoints="{
+                    0:{
+                            slidesPerView: 1,
+                            spaceBetween: 10, 
+                        },
+                    640: {
+                        slidesPerView: 1,
+                        spaceBetween: 10,
+                    },
+                    767: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    1023: {
+                        slidesPerView: 3,
+                        spaceBetween: 40,
+                    },
+                    1280: {
+                        slidesPerGroup: 5,
+                        slidesPerView: 5,
+                        spaceBetween: 25,
+                    },
+                    }"
+                    >
+                        <swiper-slide
+                        class="shadow "
+                        v-for="(product) in eachCard"
+                        :key="product.id"
+                        >
+                            <div class="p-5 bg-slate-200 w-full md:h-[480px]  space-y-3 rounded-md">
+                                <img class="rounded-md" :src="product.image" alt="">
+                                <p class="font-bold text-base line-clamp-1">{{product.name}}</p>
+                                <p class="font-extrabold text-2xl">{{product.priceText}}</p>
+                                <p v-show="product.params.shippingFee =='FREE'">Ücretsiz Kargo</p>
+                                <p @click="addToBasket(product)" class="p-3 bg-blue-300 border-none rounded-md cursor-pointer text-center">Sepete Ekle</p>
+                            </div>
+                        </swiper-slide>
+                </swiper>
+                
+            </div>
         </div>
     </div>
 
-    <div v-show="show" class="flex justify-center w-full">
-        <div class="flex justify-center items-center w-1/3 bg-slate-800 rounded-md py-10 gap-4">
-            <i class="fa-solid fa-check text-white bg-green-300 text-2xl rounded-full p-2"></i>
+    <div v-show="show" class="absolute md:top-2 md:right-5 z-50 bottom-80 right-8">
+        <div class="flex justify-center items-center md:w-[400px] w-80 bg-slate-800 rounded-md py-6 gap-4">
+            <i class="fa-solid fa-check text-white bg-green-300 text-2xl rounded-[50%] px-3 py-2"></i>
             <div class="text-xl font-semibold">
                 <h2 class="text-white">Ürün sepete eklendi.</h2>
                 <h2 class="text-blue-200">Sepete Git</h2>
@@ -124,11 +150,11 @@ function Basket() {
         </div>
     </div>
     <div>
-        <p v-show="totalAmount>0" class="absolute top-8 right-8 text-sm bg-red-400 rounded-[50%] px-[5px] text-white">{{totalAmount}}</p>
-        <i @click="Basket" class="fa-solid fa-basket-shopping absolute top-10 right-10 text-3xl text-blue-500"></i>
+        <p v-show="totalAmount>0" class="absolute md:top-8 md:right-8 top-3 right-3 text-sm bg-red-400 rounded-[50%] px-[5px] text-white">{{totalAmount}}</p>
+        <i @click="Basket" class="fa-solid fa-basket-shopping absolute md:top-10 md:right-10 top-5 right-5 text-3xl text-blue-500"></i>
     </div>
 
-    <div class="z-50 h-[500px] w-[700px] p-10 shadow-xl absolute top-20 right-16 bg-white overflow-x-hidden overflow-y-scroll rounded-md transition duration-500 ease-in-out" v-show="isActive">
+    <div class="z-50 md:h-[500px] md:w-[700px] h-[400px] md:p-10 p-5 shadow-xl absolute md:top-20 md:right-16 bg-white overflow-x-hidden overflow-y-scroll rounded-md top-14 w-full" v-show="isActive">
         <h1 class="font-bold text-2xl pb-6">Sepetim</h1>
         <div v-if="totalAmount>0" class="flex flex-col gap-5" >
             <div class="flex justify-between items-center bg-slate-300 p-3 w-full rounded-lg" v-for="(item,index) in pushBasket"
@@ -140,11 +166,11 @@ function Basket() {
                         <p> {{item.price}} TL</p>
                     </div>
                 </div>
-                <i @click="deleteItems(index)" class="fa-solid fa-trash-can cursor-pointer ml-5 text-2xl"></i>
+                <i @click="deleteItems(index)" class="fa-solid fa-trash-can cursor-pointer m-0 md:ml-5 text-2xl"></i>
             </div>
             <p class="font-bold text-lg"> Toplam Fiyat: {{totalPrice().toFixed(2)}} TL </p>
         </div>
-        <div v-else class="flex flex-col gap-8 ">
+        <div v-else class="flex flex-col gap-8">
             <i class="fa-solid fa-cart-plus text-4xl text-blue-400"></i>
             <h2 class="font-bold text-xl">Sepetiniz şu an boş</h2>
             <p class="text-lg">Sepete ürün ekleyiniz.</p>
@@ -153,8 +179,21 @@ function Basket() {
 </template>
 
 <style>
+
     .popup {
        filter: blur(20px); 
+    }
+
+    .shadow:hover {
+        box-shadow: 1px 1px 12px 5px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+
+    .swiper-button-prev {
+        left: 0;
+    }
+
+    .swiper-button-next {
+        right: 0;
     }
 </style>
 
