@@ -18,9 +18,9 @@ async function fetchData() {
 await fetch("/product-list.json")
     .then(res => res.json())
     .then((data)=> {
-        const categoryTitles = data.responses[0][0].params.userCategories
+        
         products.value = data.responses[0][0].params.recommendedProducts
-        categories.value = categoryTitles
+        categories.value = data.responses[0][0].params.userCategories
     })
 }
 fetchData()
@@ -122,12 +122,12 @@ function Basket() {
                     }"
                     >
                         <swiper-slide
-                        class="shadow "
+                        class="shadow rounded-md cursor-pointer"
                         v-for="(product) in eachCard"
                         :key="product.id"
                         >
                             <div class="p-5 bg-slate-200 w-full md:h-[480px]  space-y-3 rounded-md">
-                                <img class="rounded-md" :src="product.image" alt="">
+                                <img class="rounded-md hover:object-fill" :src="product.image" alt="">
                                 <p class="font-bold text-base line-clamp-1">{{product.name}}</p>
                                 <p class="font-extrabold text-2xl">{{product.priceText}}</p>
                                 <p v-show="product.params.shippingFee =='FREE'">Ücretsiz Kargo</p>
@@ -154,7 +154,7 @@ function Basket() {
         <i @click="Basket" class="fa-solid fa-basket-shopping absolute md:top-10 md:right-10 top-5 right-5 text-3xl text-blue-500"></i>
     </div>
 
-    <div class="z-50 md:h-[500px] md:w-[700px] h-[400px] md:p-10 p-5 shadow-xl absolute md:top-20 md:right-16 bg-white overflow-x-hidden overflow-y-scroll rounded-md top-14 w-full" v-show="isActive">
+    <div class="z-50 md:h-[500px] md:w-[700px] h-[400px] md:p-10 p-5 shade 0px 5px 15px] absolute md:top-20 md:right-16 bg-white  scrollbar rounded-md top-14 w-full" v-show="isActive">
         <h1 class="font-bold text-2xl pb-6">Sepetim</h1>
         <div v-if="totalAmount>0" class="flex flex-col gap-5" >
             <div class="flex justify-between items-center bg-slate-300 p-3 w-full rounded-lg" v-for="(item,index) in pushBasket"
@@ -164,6 +164,7 @@ function Basket() {
                     <div>
                         <p class="line-clamp-1"> {{item.name}} </p>
                         <p> {{item.price}} TL</p>
+                        <p v-show="item.params.shippingFee =='FREE'">Ücretsiz Kargo</p>
                     </div>
                 </div>
                 <i @click="deleteItems(index)" class="fa-solid fa-trash-can cursor-pointer m-0 md:ml-5 text-2xl"></i>
@@ -185,7 +186,12 @@ function Basket() {
     }
 
     .shadow:hover {
-        box-shadow: 1px 1px 12px 5px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        transition: .5s;
+    }
+
+    .shade {
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     }
 
     .swiper-button-prev {
@@ -195,5 +201,29 @@ function Basket() {
     .swiper-button-next {
         right: 0;
     }
+
+    .scrollbar{
+        scrollbar-color: #d4aa70 #e4e4e4;
+        scrollbar-width: thin;
+        direction: ltr;
+        overflow-y: auto;
+    }
+
+    .scrollbar::-webkit-scrollbar {
+        width: 13px;
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+        background-color: #e4e4e4;
+        border-radius: 100px;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 100px;
+        border: 3px solid transparent;
+        background-clip: content-box;
+        background-color: #60a5fa;
+    }
+
 </style>
 
