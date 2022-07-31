@@ -127,7 +127,7 @@ function Basket() {
                         :key="product.id"
                         >
                             <div class="p-5 bg-slate-200 w-full md:h-[480px]  space-y-3 rounded-md">
-                                <img class="rounded-md hover:object-fill" :src="product.image" alt="">
+                                <img class="rounded-md" :src="product.image" alt="">
                                 <p class="font-bold text-base line-clamp-1">{{product.name}}</p>
                                 <p class="font-extrabold text-2xl">{{product.priceText}}</p>
                                 <p v-show="product.params.shippingFee =='FREE'">Ücretsiz Kargo</p>
