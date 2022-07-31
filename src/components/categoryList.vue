@@ -64,11 +64,6 @@ function Basket() {
     isActive.value = !isActive.value
 }
 
-
-
-
-
-
 </script>
 
 <template>
